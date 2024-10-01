@@ -58,14 +58,19 @@ impl RDBWriter {
         self._write_eof()
     }
 
+    #[allow(deprecated)]
     #[pyo3(signature = (db, dct=None))]
     fn write_db(&mut self, db: u8, dct: Option<&PyDict>) -> PyResult<()> {
         self._write_bytes(&[RDB_OPCODE_SELECTDB, db])?;
 
         match dct {
-            None => { return Ok(()); }
+            None => {
+                return Ok(());
+            }
             Some(dct) => {
-                if dct.is_empty() { return Ok(()); }
+                if dct.is_empty() {
+                    return Ok(());
+                }
                 for (key, value) in dct.iter() {
                     let key_bytes = key.downcast::<PyBytes>()?.as_bytes();
                     let redis_value = RedisPyDataType::extract(value)?;
