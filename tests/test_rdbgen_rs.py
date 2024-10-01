@@ -46,16 +46,17 @@ def test_rdbgen(
 ) -> None:
     bytesio = io.BytesIO()
 
-    match method:
-        case MethodTestEnum.RDBGEN:
-            rdbgen(bytesio, dct)
-        case MethodTestEnum.DB:
-            with RDBWriter(bytesio) as writer:
-                writer.write_db(0, dct)
-        case MethodTestEnum.STREAM:
-            with RDBWriter(bytesio) as writer:
-                writer.write_db(0)
-                for key, value in dct.items():
-                    writer.write_fragment(key, value)
+    if method is MethodTestEnum.RDBGEN:
+        rdbgen(bytesio, dct)
+    elif method is MethodTestEnum.DB:
+        with RDBWriter(bytesio) as writer:
+            writer.write_db(0, dct)
+    elif method is MethodTestEnum.STREAM:
+        with RDBWriter(bytesio) as writer:
+            writer.write_db(0)
+            for key, value in dct.items():
+                writer.write_fragment(key, value)
+    else:
+        raise TypeError("Unexpected enum type.")
 
     assert bytesio.getvalue() == binary
