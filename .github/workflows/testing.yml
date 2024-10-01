@@ -51,7 +51,7 @@ jobs:
         python -m pip install -e .
         maturin build --out dist
     - name: Ruff format check
-      run: ruff format rdb_rs tests --check
+      run: ruff format rdbgen_rs tests --check
     - name: Lint with ruff
       run: ruff check .
     - name: mypy check
