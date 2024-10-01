@@ -1,3 +1,5 @@
+#![allow(deprecated)]
+
 use crc::{Crc, Digest, Table};
 use crc_catalog::CRC_64_REDIS;
 use pyo3::prelude::*;
@@ -58,7 +60,6 @@ impl RDBWriter {
         self._write_eof()
     }
 
-    #[allow(deprecated)]
     #[pyo3(signature = (db, dct=None))]
     fn write_db(&mut self, db: u8, dct: Option<&PyDict>) -> PyResult<()> {
         self._write_bytes(&[RDB_OPCODE_SELECTDB, db])?;
